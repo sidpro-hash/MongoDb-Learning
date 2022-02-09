@@ -619,7 +619,48 @@ Customer level data of ( i )
 ]
 //end date is not included
 
-
+Loan count
+[
+    {"$match":
+        {"$and":[
+            {"$expr":
+                {"$gt":["$timestamp.seconds",
+                    {"$floor":
+                        {"$subtract":[
+                            {"$divide":[
+                                {"$subtract":[ {{_start}} ,new Date(1969,12,1)]
+                                },1000]
+                            },19800]
+                        }
+                    }]
+                }
+            },
+            {"$expr":
+                {"$lt":["$timestamp.seconds",
+                    {"$floor":
+                        {"$subtract":[
+                            {"$divide":[
+                                {"$subtract":[ {{_end}} ,new Date(1969,12,1)]
+                                },1000]
+                            },19800]
+                        }
+                    }]
+                }
+            },
+            {"$and":[
+                {"stage.action":"start"},
+                {"stage.name":"LOAN DETAILS"},
+                {"variables.mobileNumber":{"$ne":"7016738442"}}]
+            }]
+        }    
+    },
+    [[{ $match: { "variables.mobileNumber" : { $eq: {{mobilenumber}} } } },]]
+    {"$project":{mobileNumber:"$variables.mobileNumber",_id:0,numberOfLoans: { "$cond": { if:{ "$isArray": "$variables.loans" }, then: { "$size": "$variables.loans" }, else: "NA"}},loans:"$variables.loans"}},
+    {"$match":{"$and":[{"numberOfLoans":{"$gt":0}}]}},
+    {"$sort":{numberOfLoans:-1}}
+]
+//end date is not included
+  
 ```
 
   [bps10]: https://github.com/bps10
