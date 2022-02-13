@@ -423,6 +423,36 @@ group by mandate_status_log.failure_reason
 order by count(mandate_status_log.failure_reason) desc
 
 
+
+how to use date_trunc() and INTERVAL?how did registrations compare to last week?
+-- Week the mandates were registered
+-- Count of registered mandates for that week
+-- Week over week change (i.e., the difference between the count this week and the previous week).
+
+with registered_count_by_week as (
+select 
+    date_trunc('week',to_timestamp(created_at/1000)) as week,
+    count(*) as mandate_registered
+from 
+    mandates
+where
+    status='registered'
+group by 
+    week
+)
+
+select 
+    w1.week,
+    w1.mandate_registered,
+    w2.week,
+    w1.mandate_registered - w2.mandate_registered as wow_change
+from    
+    registered_count_by_week w1 
+left join 
+    registered_count_by_week w2 on w1.week = w2.week + INTERVAL '1 week'
+order by
+    w1.week
+
 ```
 
 ### Query JSON Data with SQL
