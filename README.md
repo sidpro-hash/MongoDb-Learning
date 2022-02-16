@@ -422,6 +422,44 @@ and (1={{will}} or TO_DATE(TO_CHAR(TO_TIMESTAMP(mandates.created_at / 1000), 'DD
 group by mandate_status_log.failure_reason
 order by count(mandate_status_log.failure_reason) desc
 
+ 
+(3) Fund out monitor 
+select
+    distinct disbursement_prod.loan.fin_reference,
+    disbursement_prod.disbursal_payment_details.payment_status,
+    lms_pennant_postgres_db.loan_details.loan_product_type,
+    --disbursement_prod.disbursal_payment_details.payment_type,
+    --disbursement_prod.loan.loan_id,
+    --lms_pennant_postgres_db.loan_details.loan_start_date,
+    disbursement_prod.loan.created_at as loan_created,
+    --disbursement_prod.disbursal_payment_details.disbursal_account_id,
+    disbursement_prod.disbursal_payment_details.created_at as disbursement_created,
+    (CAST(disbursement_prod.disbursal_payment_details.created_at AS timestamp) - cast(disbursement_prod.loan.created_at AS timestamp)) as time_from_loan_created_to_disbursement,
+    disbursement_prod.disbursal_payment_details.failed_reason
+from
+    disbursement_prod.disbursal_payment_details
+left join
+    disbursement_prod.disbursable_loan
+    on
+        disbursement_prod.disbursable_loan.disbursable_loan_id = disbursement_prod.disbursal_payment_details.disbursable_loan_id
+left join
+    disbursement_prod.loan
+    on
+        disbursement_prod.disbursable_loan.loan_id = disbursement_prod.loan.loan_id
+left join
+    lms_pennant_postgres_db.loan_details
+    on
+        lms_pennant_postgres_db.loan_details.loan_number = disbursement_prod.loan.fin_reference
+where
+    {{payment_status}} 
+    AND {{loan_created}}
+    AND disbursement_prod.loan.fin_reference not like 'UC%'
+    AND disbursement_prod.loan.fin_reference!=''
+    AND {{loan_product_type}}
+    [[ AND disbursement_prod.loan.fin_reference={{loan_number}} ]]
+order by disbursement_prod.loan.fin_reference
+    
+
 
 
 how to use date_trunc() and INTERVAL?how did registrations compare to last week?
