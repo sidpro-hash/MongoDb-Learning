@@ -728,6 +728,147 @@ Loan count
     {"$sort":{numberOfLoans:-1}}
 ]
 //end date is not included
+
+KYC count
+[
+    {"$match":
+        {"$and":[
+            {"$expr":
+                {"$gt":["$timestamp.seconds",
+                    {"$floor":
+                        {"$subtract":[
+                            {"$divide":[
+                                {"$subtract":[ {{_start}} ,new Date(1969,12,1)]
+                                },1000]
+                            },19800]
+                        }
+                    }]
+                }
+            },
+            {"$expr":
+                {"$lt":["$timestamp.seconds",
+                    {"$floor":
+                        {"$subtract":[
+                            {"$divide":[
+                                {"$subtract":[ {{_end}} ,new Date(1969,12,1)]
+                                },1000]
+                            },19800]
+                        }
+                    }]
+                }
+            },
+            {"$or":[
+                {"stage.name":"CKYC Not accepted"},
+                {"stage.name":"initiate kyc"},
+                {"stage.name":"Initiate ekyc Error"},
+                {"stage.name":"retrieveEkycUrl"},
+                {"stage.name":"resume kyc"},
+                {"stage.name":"Failed Retrieve Ekyc url"},
+                {"stage.name":"Redirect to Digio"},
+                {"stage.name":"ekyc Complete"},
+                {"stage.name":"KYC Completed"}]
+            },{"$and":[
+                {"stage.action":"end"}]
+            }]
+        }    
+    },
+    {"$facet":{
+        
+        "CKYC_Initiate": [
+            {"$match":{"$and":[{"stage.name":"CKYC Initiate"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}},
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+        
+        "CKYC_Search": [
+            {"$match":{"$and":[{"stage.name":"CKYC Search"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}},
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+            
+        "CKYC_Search_Success": [
+            {"$match":{"$and":[{"stage.name":"CKYC Search Success"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}},
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+            
+        "CKYC_Form": [
+            {"$match":{"$and":[{"stage.name":"CKYC Form"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+            
+        "CKYC_Not_accepted": [
+            {"$match":{"$and":[{"stage.name":"CKYC Not accepted"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+            
+        "initiate_kyc": [
+            {"$match":{"$and":[{"stage.name":"initiate kyc"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+            
+        "Initiate_ekyc_Error": [
+            {"$match":{"$and":[{"stage.name":"Initiate ekyc Error"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}], 
+            
+        "retrieveEkycUrl": [
+            {"$match":{"$and":[{"stage.name":"retrieveEkycUrl"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+            
+        "resume_kyc": [
+            {"$match":{"$and":[{"stage.name":"resume kyc"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+        
+        "Failed_Retrieve_Ekyc_url": [
+            {"$match":{"$and":[{"stage.name":"Failed Retrieve Ekyc url"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+        
+        "Redirect_to_Digio": [
+            {"$match":{"$and":[{"stage.name":"Redirect to Digio"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+        
+        "ekyc_Complete": [
+            {"$match":{"$and":[{"stage.name":"ekyc Complete"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}],
+            
+        "KYC_Completed": [
+            {"$match":{"$and":[{"stage.name":"KYC Completed"}]}},
+            {"$group": {_id: "$businessKey.root",count:{$sum:1}}}
+            {"$addFields":{test:{ "$cond": { if:{ "$gt": ["$count",1] }, then:1, else:1}},st:"tempstageforquery"}},
+            {"$group" : {_id:"$st", count:{$sum:1}}}]
+        }
+    },
+    {"$project":{_id:1,
+                "CKYC Initiate":{$arrayElemAt: [ "$CKYC_Initiate.count", 0 ]},
+                "CKYC Search":{$arrayElemAt: [ "$CKYC_Search.count", 0 ]},
+                "CKYC Search Success":{$arrayElemAt: [ "$CKYC_Search_Success.count", 0 ]},
+                "CKYC Form":{$arrayElemAt: [ "$CKYC_Form.count", 0 ]},
+                "CKYC Not accepted":{ "$cond": { if:{ "$gt": [{$arrayElemAt: [ "$CKYC_Not_accepted.count", 0 ]},0] }, then: {$arrayElemAt: [ "$CKYC_Not_accepted.count", 0 ]}, else: 0}},
+                "Initiate eKYC":{$arrayElemAt: [ "$initiate_kyc.count", 0 ]},
+                "Initiate eKYC Error":{$arrayElemAt: [ "$Initiate_ekyc_Error.count", 0 ]},
+                "retrieveEkycUrl":{$arrayElemAt: [ "$retrieveEkycUrl.count", 0 ]},
+                "Resume eKYC":{$arrayElemAt: [ "$resume_kyc.count", 0 ]},
+                "Failed Retrieve eKYC url":{$arrayElemAt: [ "$Failed_Retrieve_Ekyc_url.count", 0 ]},
+                "Redirect to Digio":{$arrayElemAt: [ "$Redirect_to_Digio.count", 0 ]},
+                "eKYC_Complete":{ "$cond": { if:{ "$gt": [{$arrayElemAt: [ "$ekyc_Complete.count", 0 ]},0] }, then: {$arrayElemAt: [ "$ekyc_Complete.count", 0 ]}, else: 0}},
+                "KYC_Completed":{$arrayElemAt: [ "$KYC_Completed.count", 0 ]}
+    }}
+]
   
 ```
 
