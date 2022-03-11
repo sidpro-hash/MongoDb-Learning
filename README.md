@@ -491,6 +491,133 @@ left join
 order by
     w1.week
 
+ 
+ Cohort
+  
+ SELECT 
+    December.days AS days,
+    May.may_register_count AS may_register_count,
+    June.june_register_count AS june_register_count,
+    July.july_register_count AS july_register_count,
+    August.august_register_count AS august_register_count,
+    September.september_register_count AS september_register_count,
+    October.october_register_count AS october_register_count, 
+    November.november_register_count AS november_register_count,
+    December.december_register_count AS december_register_count
+    
+FROM (
+        select 
+            date_part('day',to_timestamp(created_at/1000)) as Days,
+            count(status) as December_Register_count
+        from mandates 
+        where 
+            date_part('month',to_timestamp(created_at/1000))=12 
+            and date_part('year',to_timestamp(created_at/1000))=2021 
+            and status='registered' 
+            [[ and mandates.mode = {{_mode}} ]] 
+            [[ and mandates.los_type = {{_los_type}} ]]
+        group by date_part('day',to_timestamp(created_at/1000))
+    ) AS December
+        
+LEFT JOIN (
+            select 
+                date_part('day',to_timestamp(created_at/1000)) as Days,
+                count(status) as November_Register_count
+            from mandates 
+            where 
+                date_part('month',to_timestamp(created_at/1000))=11 
+                and date_part('year',to_timestamp(created_at/1000))=2021 
+                and status='registered' 
+                [[ and mandates.mode = {{_mode}} ]] 
+                [[ and mandates.los_type = {{_los_type}} ]]
+            group by date_part('day',to_timestamp(created_at/1000))
+        ) As November ON December.days = November.days 
+            
+LEFT JOIN (
+            select 
+                date_part('day',to_timestamp(created_at/1000)) as Days,
+                count(status) as October_Register_count
+            from mandates 
+            where 
+                date_part('month',to_timestamp(created_at/1000))=10 
+                and date_part('year',to_timestamp(created_at/1000))=2021 
+            and status='registered' 
+            [[ and mandates.mode = {{_mode}} ]] 
+            [[ and mandates.los_type = {{_los_type}} ]]
+            group by date_part('day',to_timestamp(created_at/1000))
+        ) AS October ON December.days = October.days
+        
+LEFT JOIN (
+            select 
+                date_part('day',to_timestamp(created_at/1000)) as Days,
+                count(status) as  September_Register_count
+            from mandates 
+            where 
+                date_part('month',to_timestamp(created_at/1000))=9 
+                and date_part('year',to_timestamp(created_at/1000))=2021 
+            and status='registered' 
+            [[ and mandates.mode = {{_mode}} ]] 
+            [[ and mandates.los_type = {{_los_type}} ]]
+            group by date_part('day',to_timestamp(created_at/1000))
+        ) AS  September ON December.days =  September.days
+        
+LEFT JOIN (
+            select 
+                date_part('day',to_timestamp(created_at/1000)) as Days,
+                count(status) as  August_Register_count
+            from mandates 
+            where 
+                date_part('month',to_timestamp(created_at/1000))=8 
+                and date_part('year',to_timestamp(created_at/1000))=2021 
+            and status='registered' 
+            [[ and mandates.mode = {{_mode}} ]] 
+            [[ and mandates.los_type = {{_los_type}} ]]
+            group by date_part('day',to_timestamp(created_at/1000))
+        ) AS  August ON December.days =  August.days
+        
+LEFT JOIN (
+            select 
+                date_part('day',to_timestamp(created_at/1000)) as Days,
+                count(status) as  July_Register_count
+            from mandates 
+            where 
+                date_part('month',to_timestamp(created_at/1000))=7
+                and date_part('year',to_timestamp(created_at/1000))=2021 
+            and status='registered' 
+            [[ and mandates.mode = {{_mode}} ]] 
+            [[ and mandates.los_type = {{_los_type}} ]]
+            group by date_part('day',to_timestamp(created_at/1000))
+        ) AS  July ON December.days =  July.days
+        
+LEFT JOIN (
+            select 
+                date_part('day',to_timestamp(created_at/1000)) as Days,
+                count(status) as  June_Register_count
+            from mandates 
+            where 
+                date_part('month',to_timestamp(created_at/1000))=6
+                and date_part('year',to_timestamp(created_at/1000))=2021 
+            and status='registered' 
+            [[ and mandates.mode = {{_mode}} ]] 
+            [[ and mandates.los_type = {{_los_type}} ]]
+            group by date_part('day',to_timestamp(created_at/1000))
+        ) AS  June ON December.days =  June.days
+        
+LEFT JOIN (
+            select 
+                date_part('day',to_timestamp(created_at/1000)) as Days,
+                count(status) as  May_Register_count
+            from mandates 
+            where 
+                date_part('month',to_timestamp(created_at/1000))=5
+                and date_part('year',to_timestamp(created_at/1000))=2021 
+            and status='registered' 
+            [[ and mandates.mode = {{_mode}} ]] 
+            [[ and mandates.los_type = {{_los_type}} ]]
+            group by date_part('day',to_timestamp(created_at/1000))
+        ) AS  May ON December.days =  May.days
+LIMIT 1048575
+  
 ```
 
 ### Query JSON Data with SQL
