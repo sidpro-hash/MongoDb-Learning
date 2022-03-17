@@ -1025,7 +1025,93 @@ KYC count
                 "KYC_Completed":{$arrayElemAt: [ "$KYC_Completed.count", 0 ]}
     }}
 ]
-  
+
+SMS Daily Count
+[
+  {
+    "$match": {"$and":[
+      {"meta.stageName":"SMS SUCCESS INSIGHTS"},
+      {"$or":[{"data.smsResponseStatus":"FAILED"},{"data.smsResponseStatus":"DELIVERED"}]}]
+    }
+  },
+  {
+    "$addFields": {
+      "startDate": { "$toDate": "$data.date" }
+    }
+  },
+  {
+    "$addFields": {
+      "startMonth": { "$toString": { "$month": "$startDate" } },
+      "startDay": { "$toString": { "$dayOfMonth": "$startDate" } }
+    }
+  },
+  {"$addFields":{"FAILED":{ "$cond": { if:{ "$eq": ["$data.smsResponseStatus","FAILED"] }, then:1, else:0}}}},
+  {"$addFields":{"DELIVERED":{ "$cond": { if:{ "$eq": ["$data.smsResponseStatus","DELIVERED"] }, then:1, else:0}}}},
+  {
+    "$project": {
+      "dateDiff": {
+        "$subtract": [ ISODate(), "$startDate" ]
+      },
+      "startDate": {
+        "$concat": [ "$startDay", "/", "$startMonth"]
+      },
+      "rootBusinessKey": "$id.rootBusinessKey",
+      "FAILED":"$FAILED",
+      "DELIVERED":"$DELIVERED"
+    }  
+  },
+  {
+    "$match": {
+        "dateDiff": {
+            "$lt": 2592000000
+        }
+    }
+  },
+  {
+    "$group": {
+      "_id": "$startDate",
+      "Start Date": {
+        "$first": "$startDate"
+      },
+      "dateDiff": {
+        "$first": "$dateDiff"
+      },
+      "DELIVERED": {
+            "$sum": {
+                "$cond": [
+                    { "$eq": ["$DELIVERED", 1 ] },
+                    1,
+                    0
+                ]
+            }
+        },
+        "FAILED": {
+            "$sum": {
+                "$cond": [
+                    { "$eq": ["$FAILED", 1 ] },
+                    1,
+                    0
+                ]
+            }
+        },
+      
+      "count": {
+        "$sum": 1
+      }
+    }
+  },
+  {
+    "$sort": { "dateDiff": 1 }
+  },
+  {
+    "$project": {
+      "_id": false,
+      "dateDiff": false,
+      "count":false
+    }
+  }
+]
+
 ```
 
   [bps10]: https://github.com/bps10
