@@ -462,7 +462,7 @@ order by disbursement_prod.loan.fin_reference
 
 
 
-how to use date_trunc() and INTERVAL?how did registrations compare to last week?
+(4) how to use date_trunc() and INTERVAL?how did registrations compare to last week?
 -- Week the mandates were registered
 -- Count of registered mandates for that week
 -- Week over week change (i.e., the difference between the count this week and the previous week).
@@ -619,7 +619,7 @@ LEFT JOIN (
 LIMIT 1048575
 
   
-Pivot HackerRank
+(5) Pivot HackerRank
 set @r1=0, @r2=0, @r3=0, @r4=0;
 select min(Doctor), min(Professor), min(Singer), min(Actor)
 from(
@@ -646,7 +646,25 @@ SELECT
 FROM BST
 ORDER BY N ASC
   
+(6) FK escrow everyday for year
+select 
+    extract(DAY FROM created_at) as Days,
+    coalesce(sum(CAST(transfer_amt AS double)),0) as debited_amount
+from fk_escrow.validate_notify_details
+where 
+    extract(MONTH FROM created_at)=extract(MONTH FROM now())
+    AND extract(YEAR FROM created_at)=extract(YEAR FROM now())
+    AND status='DEBITED' AND bene_account_no like 'GSFTFK%'
+group by extract(DAY FROM created_at)
+order by extract(DAY FROM created_at) DESC
 
+(7) FK escrow yesterday
+select ((select coalesce(sum(CAST(transfer_amt AS double)),0) from fk_escrow.validate_notify_details
+WHERE date_trunc('day', created_at) BETWEEN date_trunc('day', date_add('day', -{{days}}, CAST(now() AS timestamp)))
+   AND date_trunc('day', date_add('day', 0, CAST(now() AS timestamp))) AND status='CREDITED' AND bene_account_no like 'GSFTFK%') - (select coalesce(sum(CAST(transfer_amt AS double)),0) from fk_escrow.validate_notify_details
+WHERE date_trunc('day', created_at) BETWEEN date_trunc('day', date_add('day', -{{days}}, CAST(now() AS timestamp)))
+   AND date_trunc('day', date_add('day', 0, CAST(now() AS timestamp))) AND status='DEBITED' AND bene_account_no like 'GSFTFK%')) 
+  
 ```
 
 ### Query JSON Data with SQL
