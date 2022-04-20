@@ -1,6 +1,6 @@
 MongoDB and SQL Learning
 ========================
-
+![SQL Query Execution Order](sql_execution_order.PNG)
 With MarkdownPreview
 ---------------
 
