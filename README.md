@@ -1130,6 +1130,419 @@ SMS Daily Count
   }
 ]
 
+  
+Branch Wise loan and Total Documents
+Use of
+$match
+$and
+$sort
+$group
+$first
+$addFields
+$toDate
+$expr
+$gt
+$lt
+$cond
+$eq
+optional [[ ]]
+$arrayElemAt
+$size
+$isArray
+$add
+$project
+$sum
+
+
+[
+    {"$match":
+        {"$and":[
+            {"$and":[
+                {"meta.stageName":"Insight Upload files"},
+                {"meta.stageAction":"end"}]
+            }]
+        }    
+    },
+    {"$sort":{"meta.end":-1}},
+    {"$group":{_id:"$id.rootBusinessKey",variables:{$first:"$data"}}},
+    {"$addFields":{date:{"$toDate":"$variables.startedTime"}}},
+    {"$match":
+        {"$and":[
+            {"$expr":
+                {"$gt":["$date", {{_start}} ]}
+            },
+            {"$expr":
+                {"$lt":["$date", {{_end}} ]}
+            }]
+        }    
+    },
+    {"$addFields":{submited:{"$cond":[{"$eq":["$variables.submit",true]},"true","false"]}}},
+    {"$addFields":{finStartDate:{"$toDate":"$variables.finStartDate"}}},
+    [[{ $match: { "variables.finType" : { $eq: {{finType}} } } },]]
+    [[{ $match: { "variables.loanNumber" : { $eq: {{loanNumber}} } } },]]
+    [[{ $match: { "submited" : { $eq: {{submited}} } } },]]
+    [[{ $match: { "variables.branchState" : { $eq: {{branchState}} } } },]]
+    [[{ $match: { "variables.branchName" : { $eq: {{branchName}} } } },]]
+    [[{ $match: { "finStartDate" :{"$gte":  {{finStartDate_start}} } } },]]
+    [[{ $match: { "finStartDate" :{"$lte":  {{finStartDate_end}} } } },]]
+    {"$addFields":{
+        first_approvals:{$arrayElemAt: [ "$variables.approvals", 0 ]},
+        first_additionalPostApprovalDocuments:{$arrayElemAt: [ "$variables.additionalPostApprovalDocuments", 0 ]},
+        first_verifications:{$arrayElemAt: [ "$variables.verifications", 0 ]},
+        first_sanctionLetter:{$arrayElemAt: [ "$variables.sanctionLetter", 0 ]},
+        first_financials:{$arrayElemAt: [ "$variables.financials", 0 ]},
+        first_documents:{$arrayElemAt: [ "$variables.documents", 0 ]},
+        first_kycDocuments:{$arrayElemAt: [ "$variables.kycDocuments", 0 ]},
+        first_repaymentInstruments:{$arrayElemAt: [ "$variables.repaymentInstruments", 0 ]},
+        first_loanAgreementAndDeed:{$arrayElemAt: [ "$variables.loanAgreementAndDeed", 0 ]},
+        first_propertyPapers:{$arrayElemAt: [ "$variables.propertyPapers", 0 ]},
+        first_collateralDocs:{$arrayElemAt: [ "$variables.originalCollateralDocuments", 0 ]}
+    }},
+    {"$project":{
+        _id:0,
+        loanNumber: "$_id",
+        date:1,
+        finStartDate:1,
+        branchName:"$variables.branchName",
+        approvals: { "$cond": { if:{ "$isArray": "$variables.approvals" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.approvals"},1] }, {"$size":"$first_approvals.approvals"} , { "$size": "$variables.approvals" } ] }, else: 0}}, 
+        postApprovalDocs: { "$cond": { if:{ "$isArray": "$variables.additionalPostApprovalDocuments" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.additionalPostApprovalDocuments"},1] }, {"$size":"$first_additionalPostApprovalDocuments.postApprovalDocs"} , { "$size": "$variables.additionalPostApprovalDocuments" } ] }, else: 0}},
+        verifications: { "$cond": { if:{ "$isArray": "$variables.verifications" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.verifications"},1] }, {"$size":"$first_verifications.verifications"} , { "$size": "$variables.verifications" } ] }, else: 0}},
+        sanctionLetter: { "$cond": { if:{ "$isArray": "$variables.sanctionLetter" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.sanctionLetter"},1] }, {"$size":"$first_sanctionLetter.sanctionLetter"} , { "$size": "$variables.sanctionLetter" } ] }, else: 0}},
+        financials: { "$cond": { if:{ "$isArray": "$variables.financials" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.financials"},1] }, {"$size":"$first_financials.financials"} , { "$size": "$variables.financials" } ] }, else: 0}},
+        checklistAndDisbursementMemo: { "$cond": { if:{ "$isArray": "$variables.documents" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.documents"},1] }, {"$size":"$first_documents.checklistAndDisbursementMemo"} , { "$size": "$variables.documents" } ] }, else: 0}},
+        kycDocuments: { "$cond": { if:{ "$isArray": "$variables.kycDocuments" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.kycDocuments"},1] }, {"$size":"$first_kycDocuments.kycDocs"} , { "$size": "$variables.kycDocuments" } ] }, else: 0}},
+        repaymentInstruments: { "$cond": { if:{ "$isArray": "$variables.repaymentInstruments" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.repaymentInstruments"},1] }, {"$size":"$first_repaymentInstruments.repaymentInstruments"} , { "$size": "$variables.repaymentInstruments" } ] }, else: 0}},
+        loanAgreementAndDeed: { "$cond": { if:{ "$isArray": "$variables.loanAgreementAndDeed" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.loanAgreementAndDeed"},1] }, {"$size":"$first_loanAgreementAndDeed.loanAgreementAndDeed"} , { "$size": "$variables.loanAgreementAndDeed" } ] }, else: 0}},
+        propertyPapers: { "$cond": { if:{ "$eq": [{"$size":"$variables.propertyPapers"},1] }, then: { "$cond": [{"$isArray": "$variables.propertyPapers"},{ "$cond": [ { "$eq":[{"$size":"$variables.propertyPapers"},1] }, {"$cond":[{"$isArray": "$first_propertyPapers.propertyPapers"},{"$size":"$first_propertyPapers.propertyPapers"},{"$size":"$variables.propertyPapers"}]} , { "$size": "$variables.propertyPapers" } ] },0] }, else: 0}},
+        originalCollateralDocuments: { "$cond": { if:{ "$eq": [{"$size":"$variables.originalCollateralDocuments"},1] }, then: { "$cond": [{"$isArray": "$variables.originalCollateralDocuments"},{ "$cond": [ { "$eq":[{"$size":"$variables.originalCollateralDocuments"},1] }, {"$cond":[{"$isArray": "$first_collateralDocs.collateralDocs"},{"$size":"$first_collateralDocs.collateralDocs"},{"$size":"$variables.originalCollateralDocuments"}]} , { "$size": "$variables.originalCollateralDocuments" } ] },0] }, else: 0}}
+    }},
+    {"$addFields":{Total:{ $add: [ "$approvals", "$postApprovalDocs", "$verifications", "$sanctionLetter", "$financials", "$checklistAndDisbursementMemo", "$kycDocuments", "$loanAgreementAndDeed", "$repaymentInstruments", "$propertyPapers", "$originalCollateralDocuments"] } } },
+    {"$project":{loanNumber:1,finStartDate:1,branchName:1,startedTime:"$date",approvals:1,postApprovalDocs:1,verifications:1,sanctionLetter:1,financials:1,checklistAndDisbursementMemo:1,kycDocuments:1,repaymentInstruments:1,loanAgreementAndDeed:1,propertyPapers:1,originalCollateralDocuments:1,Total:1}},
+    {"$group":{_id:"$loanNumber",Total:{"$first":"$Total"},branchName:{"$first":"$branchName"}}},
+    {"$addFields":{temp:1}},
+    {"$group":{
+        "_id":"$branchName",
+        "count":{
+            "$sum":{
+                "$cond": [
+                    { "$gte": ["$Total", 0 ] },
+                    "$Total",
+                    0
+                ]}
+            }
+        "loan":{
+            "$sum":{
+                "$cond": [
+                    { "$gte": ["$temp", 0 ] },
+                    "$temp",
+                    0
+                ]}
+            }
+        }
+    },
+    {"$project":{"Branch Name":"$_id","Total Documents":"$count","Total loan":"$loan",_id:0}}
+]
+
+
+
+Uploaded Documents by LoanNumber
+
+[
+    {"$match":
+        {"$and":[
+            {"$and":[
+                {"meta.stageName":"Insight Upload files"},
+                {"meta.stageAction":"end"}]
+            }]
+        }    
+    },
+    {"$sort":{"meta.end":-1}},
+    {"$group":{_id:"$id.rootBusinessKey",variables:{$first:"$data"}}},
+    {"$addFields":{date:{"$toDate":"$variables.startedTime"}}},
+    {"$match":
+        {"$and":[
+            {"$expr":
+                {"$gt":["$date", {{_start}} ]}
+            },
+            {"$expr":
+                {"$lt":["$date", {{_end}} ]}
+            }]
+        }    
+    },
+    {"$addFields":{submited:{"$cond":[{"$eq":["$variables.submit",true]},"true","false"]}}},
+    {"$addFields":{finStartDate:{"$toDate":"$variables.finStartDate"}}},
+    [[{ $match: { "variables.finType" : { $eq: {{finType}} } } },]]
+    [[{ $match: { "variables.loanNumber" : { $eq: {{loanNumber}} } } },]]
+    [[{ $match: { "submited" : { $eq: {{submited}} } } },]]
+    [[{ $match: { "variables.branchState" : { $eq: {{branchState}} } } },]]
+    [[{ $match: { "variables.branchName" : { $eq: {{branchName}} } } },]]
+    [[{ $match: { "finStartDate" :{"$gte":  {{finStartDate_start}} } } },]]
+    [[{ $match: { "finStartDate" :{"$lte":  {{finStartDate_end}} } } },]]
+    {"$addFields":{
+        first_approvals:{$arrayElemAt: [ "$variables.approvals", 0 ]},
+        first_additionalPostApprovalDocuments:{$arrayElemAt: [ "$variables.additionalPostApprovalDocuments", 0 ]},
+        first_verifications:{$arrayElemAt: [ "$variables.verifications", 0 ]},
+        first_sanctionLetter:{$arrayElemAt: [ "$variables.sanctionLetter", 0 ]},
+        first_financials:{$arrayElemAt: [ "$variables.financials", 0 ]},
+        first_documents:{$arrayElemAt: [ "$variables.documents", 0 ]},
+        first_kycDocuments:{$arrayElemAt: [ "$variables.kycDocuments", 0 ]},
+        first_repaymentInstruments:{$arrayElemAt: [ "$variables.repaymentInstruments", 0 ]},
+        first_loanAgreementAndDeed:{$arrayElemAt: [ "$variables.loanAgreementAndDeed", 0 ]},
+        first_propertyPapers:{$arrayElemAt: [ "$variables.propertyPapers", 0 ]},
+        first_collateralDocs:{$arrayElemAt: [ "$variables.originalCollateralDocuments", 0 ]}
+    }},
+    {"$project":{
+        _id:0,
+        loanNumber: "$_id",
+        date:1,
+        finStartDate:1,
+        approvals: { "$cond": { if:{ "$isArray": "$variables.approvals" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.approvals"},1] }, {"$size":"$first_approvals.approvals"} , { "$size": "$variables.approvals" } ] }, else: 0}}, 
+        postApprovalDocs: { "$cond": { if:{ "$isArray": "$variables.additionalPostApprovalDocuments" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.additionalPostApprovalDocuments"},1] }, {"$size":"$first_additionalPostApprovalDocuments.postApprovalDocs"} , { "$size": "$variables.additionalPostApprovalDocuments" } ] }, else: 0}},
+        verifications: { "$cond": { if:{ "$isArray": "$variables.verifications" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.verifications"},1] }, {"$size":"$first_verifications.verifications"} , { "$size": "$variables.verifications" } ] }, else: 0}},
+        sanctionLetter: { "$cond": { if:{ "$isArray": "$variables.sanctionLetter" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.sanctionLetter"},1] }, {"$size":"$first_sanctionLetter.sanctionLetter"} , { "$size": "$variables.sanctionLetter" } ] }, else: 0}},
+        financials: { "$cond": { if:{ "$isArray": "$variables.financials" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.financials"},1] }, {"$size":"$first_financials.financials"} , { "$size": "$variables.financials" } ] }, else: 0}},
+        checklistAndDisbursementMemo: { "$cond": { if:{ "$isArray": "$variables.documents" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.documents"},1] }, {"$size":"$first_documents.checklistAndDisbursementMemo"} , { "$size": "$variables.documents" } ] }, else: 0}},
+        kycDocuments: { "$cond": { if:{ "$isArray": "$variables.kycDocuments" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.kycDocuments"},1] }, {"$size":"$first_kycDocuments.kycDocs"} , { "$size": "$variables.kycDocuments" } ] }, else: 0}},
+        repaymentInstruments: { "$cond": { if:{ "$isArray": "$variables.repaymentInstruments" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.repaymentInstruments"},1] }, {"$size":"$first_repaymentInstruments.repaymentInstruments"} , { "$size": "$variables.repaymentInstruments" } ] }, else: 0}},
+        loanAgreementAndDeed: { "$cond": { if:{ "$isArray": "$variables.loanAgreementAndDeed" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.loanAgreementAndDeed"},1] }, {"$size":"$first_loanAgreementAndDeed.loanAgreementAndDeed"} , { "$size": "$variables.loanAgreementAndDeed" } ] }, else: 0}},
+        propertyPapers: { "$cond": { if:{ "$eq": [{"$size":"$variables.propertyPapers"},1] }, then: { "$cond": [{"$isArray": "$variables.propertyPapers"},{ "$cond": [ { "$eq":[{"$size":"$variables.propertyPapers"},1] }, {"$cond":[{"$isArray": "$first_propertyPapers.propertyPapers"},{"$size":"$first_propertyPapers.propertyPapers"},{"$size":"$variables.propertyPapers"}]} , { "$size": "$variables.propertyPapers" } ] },0] }, else: 0}},
+        originalCollateralDocuments: { "$cond": { if:{ "$eq": [{"$size":"$variables.originalCollateralDocuments"},1] }, then: { "$cond": [{"$isArray": "$variables.originalCollateralDocuments"},{ "$cond": [ { "$eq":[{"$size":"$variables.originalCollateralDocuments"},1] }, {"$cond":[{"$isArray": "$first_collateralDocs.collateralDocs"},{"$size":"$first_collateralDocs.collateralDocs"},{"$size":"$variables.originalCollateralDocuments"}]} , { "$size": "$variables.originalCollateralDocuments" } ] },0] }, else: 0}}
+    }},
+    {"$addFields":{Total:{ $add: [ "$approvals", "$postApprovalDocs", "$verifications", "$sanctionLetter", "$financials", "$checklistAndDisbursementMemo", "$kycDocuments", "$loanAgreementAndDeed", "$repaymentInstruments", "$propertyPapers", "$originalCollateralDocuments"] } } },
+    {"$project":{loanNumber:1,finStartDate:1,startedTime:"$date",approvals:1,postApprovalDocs:1,verifications:1,sanctionLetter:1,financials:1,checklistAndDisbursementMemo:1,kycDocuments:1,repaymentInstruments:1,loanAgreementAndDeed:1,propertyPapers:1,originalCollateralDocuments:1,Total:1}},
+    {"$group":{_id:"$loanNumber",finStartDate:{$first:"$finStartDate"},startedTime:{$first:"$startedTime"},approvals:{$first:"$approvals"},postApprovalDocs:{$first:"$postApprovalDocs"},verifications:{$first:"$verifications"},sanctionLetter:{$first:"$sanctionLetter"},financials:{$first:"$financials"},checklistAndDisbursementMemo:{$first:"$checklistAndDisbursementMemo"},kycDocuments:{$first:"$kycDocuments"},repaymentInstruments:{$first:"$repaymentInstruments"},loanAgreementAndDeed:{$first:"$loanAgreementAndDeed"},propertyPapers:{$first:"$propertyPapers"},originalCollateralDocuments:{$first:"$originalCollateralDocuments"},Total:{$first:"$Total"}}},
+    {"$sort":{startedTime:-1}},
+    {"$addFields":{Deadline:{"$add":["$finStartDate",604800000]}}},
+    {"$addFields":{Status:{"$cond":[{"$gt":[new Date(),"$Deadline"]},"Overdue","inProgress"]}}},
+    {"$project":{_id:0,loanNumber:"$_id",finStartDate:1,startedTime:1,Deadline:1,Status:1,approvals:1,postApprovalDocs:1,verifications:1,sanctionLetter:1,financials:1,checklistAndDisbursementMemo:1,kycDocuments:1,repaymentInstruments:1,loanAgreementAndDeed:1,propertyPapers:1,originalCollateralDocuments:1,Total:1}}
+]
+
+
+
+Branch Wise submitted or inprogress
+
+[
+    {"$match":
+        {"$and":[
+            {"$and":[
+                {"meta.stageName":"Insight Upload files"},
+                {"meta.stageAction":"end"}]
+            }]
+        }    
+    },
+    {"$sort":{"meta.end":-1}},
+    {"$group":{_id:"$id.rootBusinessKey",variables:{$first:"$data"}}},
+    {"$addFields":{date:{"$toDate":"$variables.startedTime"}}},
+    {"$match":
+        {"$and":[
+            {"$expr":
+                {"$gt":["$date", {{_start}} ]}
+            },
+            {"$expr":
+                {"$lt":["$date", {{_end}} ]}
+            }]
+        }    
+    },
+    {"$addFields":{submited:{"$cond":[{"$eq":["$variables.submit",true]},"true","false"]}}},
+    {"$addFields":{finStartDate:{"$toDate":"$variables.finStartDate"}}},
+    [[{ $match: { "variables.finType" : { $eq: {{finType}} } } },]]
+    [[{ $match: { "variables.loanNumber" : { $eq: {{loanNumber}} } } },]]
+    [[{ $match: { "submited" : { $eq: {{submited}} } } },]]
+    [[{ $match: { "variables.branchState" : { $eq: {{branchState}} } } },]]
+    [[{ $match: { "variables.branchName" : { $eq: {{branchName}} } } },]]
+    [[{ $match: { "finStartDate" :{"$gte":  {{finStartDate_start}} } } },]]
+    [[{ $match: { "finStartDate" :{"$lte":  {{finStartDate_end}} } } },]]
+    {"$addFields":{SUBMITTED:{"$cond":[{"$eq":["$variables.submit",true]},1,0]}}},
+    {"$addFields":{INPROGRESS:{"$cond":[{"$eq":["$variables.submit",true]},0,1]}}},
+    {"$project":{SUBMITTED:1,INPROGRESS:1,"branchName":"$variables.branchName","branchState":"$variables.branchState",finStartDate:{"$toDate":"$variables.finStartDate"},loanNumber:1}},
+    {"$group":{
+        "_id":"$branchName",
+        "SUBMITTED":{
+            "$sum":{
+                "$cond": [
+                    { "$eq": ["$SUBMITTED", 1 ] },
+                    1,
+                    0
+                ]}
+            }
+        "INPROGRESS":{
+            "$sum":{
+                "$cond": [
+                    { "$eq": ["$INPROGRESS", 1 ] },
+                    1,
+                    0
+                ]}
+            }
+        }
+    },
+    {"$sort":{_id:-1}},
+    {"$project":{"Branch State":"$_id","INPROGRESS":"$INPROGRESS","SUBMITTED":"$SUBMITTED",_id:0}}
+    
+]
+
+
+Cluster Wise submitted or inprogress
+Use of
+$lookup - left join nosql
+
+[
+    {"$match":
+        {"$and":[
+            {"$and":[
+                {"stage.name":"Upload files"}]
+            }]
+        }    
+    },
+    {"$sort":{"timestamp.seconds":-1}},
+    {"$group":{_id:"$businessKey.root",max:{$max:"$timestamp.seconds"},variables:{$first:"$variables"},}},
+    {"$addFields":{date:{"$toDate":"$variables.startedTime"}}},
+    {"$match":
+        {"$and":[
+            {"$expr":
+                {"$gt":["$date", {{_start}} ]}
+            },
+            {"$expr":
+                {"$lt":["$date", {{_end}} ]}
+            }]
+        }    
+    },
+    {"$addFields":{SUBMITTED:{"$cond":[{"$eq":["$variables.submit",true]},1,0]}}},
+    {"$addFields":{INPROGRESS:{"$cond":[{"$eq":["$variables.submit",true]},0,1]}}},
+    [[{ $match: { "variables.finType" : { $eq: {{finType}} } } },]]
+    [[{ $match: { "variables.loanNumber" : { $eq: {{loanNumber}} } } },]]
+    [[{ $match: { "issubmited" :  {{submited}}  } },]]
+    {"$project":{loanNumber:"$_id",SUBMITTED:1,INPROGRESS:1,_id:0}},
+    {"$lookup":{
+        from: "turiya.digitization.upload-file-helper-.process-uploadhelper",
+        localField: "loanNumber",
+        foreignField: "businessKey.root",
+        as: "fromItems"
+        }
+    },
+    {"$unwind":"$fromItems"},
+    {"$match":
+        {"$and":[
+            {"fromItems.stage.action":"end"},
+            {"fromItems.stage.name":"Get customer details"},
+            {"fromItems.variables.branchData.branchState":{"$ne":null}}]
+        }
+    },
+    {"$project":{SUBMITTED:1,INPROGRESS:1,"branchState":"$fromItems.variables.branchData.branchState",finStartDate:{"$toDate":"$fromItems.variables.finStartDate"},loanNumber:1,timestamp:"$fromItems.timestamp"}},
+    [[{ $match: { "finStartDate" :{"$gte":  {{finStartDate_start}} } } },]]
+    [[{ $match: { "finStartDate" :{"$lte":  {{finStartDate_end}} } } },]]
+    {"$sort":{timestamp:-1}},
+    {"$group":{
+        "_id":"$branchState",
+        "SUBMITTED":{
+            "$sum":{
+                "$cond": [
+                    { "$eq": ["$SUBMITTED", 1 ] },
+                    1,
+                    0
+                ]}
+            }
+        "INPROGRESS":{
+            "$sum":{
+                "$cond": [
+                    { "$eq": ["$INPROGRESS", 1 ] },
+                    1,
+                    0
+                ]}
+            }
+        }
+    },
+    {"$sort":{_id:-1}},
+    {"$project":{"Branch State":"$_id","INPROGRESS":"$INPROGRESS","SUBMITTED":"$SUBMITTED",_id:0}}
+    
+]
+
+loans from EEG
+Use of
+$exists
+
+
+[
+    {"$match":
+        {"$and":[
+            {"$and":[
+                {"stage.name":"Upload files"}]
+            }]
+        }    
+    },
+    {"$sort":{"timestamp.seconds":-1}},
+    {"$group":{_id:"$businessKey.root",max:{$max:"$timestamp.seconds"},variables:{$first:"$variables"},}},
+    {"$addFields":{date:{"$toDate":"$variables.startedTime"}}},
+    {"$match":
+        {"$and":[
+            {"$expr":
+                {"$gt":["$date", {{_start}} ]}
+            },
+            {"$expr":
+                {"$lt":["$date", {{_end}} ]}
+            },
+            {"variables.documentFromMeraki":{$exists:true}}]
+        }    
+    },
+    {"$addFields":{issubmited:{"$cond":[{"$eq":["$variables.submit",true]},"true","false"]}}},
+    {"$addFields":{
+        first_approvals:{$arrayElemAt: [ "$variables.approvals", 0 ]},
+        first_additionalPostApprovalDocuments:{$arrayElemAt: [ "$variables.additionalPostApprovalDocuments", 0 ]},
+        first_verifications:{$arrayElemAt: [ "$variables.verifications", 0 ]},
+        first_sanctionLetter:{$arrayElemAt: [ "$variables.sanctionLetter", 0 ]},
+        first_financials:{$arrayElemAt: [ "$variables.financials", 0 ]},
+        first_documents:{$arrayElemAt: [ "$variables.documents", 0 ]},
+        first_kycDocuments:{$arrayElemAt: [ "$variables.kycDocuments", 0 ]},
+        first_repaymentInstruments:{$arrayElemAt: [ "$variables.repaymentInstruments", 0 ]},
+        first_loanAgreementAndDeed:{$arrayElemAt: [ "$variables.loanAgreementAndDeed", 0 ]},
+        first_propertyPapers:{$arrayElemAt: [ "$variables.propertyPapers", 0 ]},
+        first_collateralDocs:{$arrayElemAt: [ "$variables.originalCollateralDocuments", 0 ]}
+    }},
+    [[{ $match: { "variables.finType" : { $eq: {{finType}} } } },]]
+    [[{ $match: { "variables.loanNumber" : { $eq: {{loanNumber}} } } },]]
+    [[{ $match: { "issubmited" :  {{submited}}  } },]]
+    {"$project":{
+        _id:0,
+        loanNumber: "$_id",
+        date:1,
+        approvals: { "$cond": { if:{ "$isArray": "$variables.approvals" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.approvals"},1] }, {"$size":"$first_approvals.approvals"} , { "$size": "$variables.approvals" } ] }, else: 0}}, 
+        postApprovalDocs: { "$cond": { if:{ "$isArray": "$variables.additionalPostApprovalDocuments" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.additionalPostApprovalDocuments"},1] }, {"$size":"$first_additionalPostApprovalDocuments.postApprovalDocs"} , { "$size": "$variables.additionalPostApprovalDocuments" } ] }, else: 0}},
+        verifications: { "$cond": { if:{ "$isArray": "$variables.verifications" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.verifications"},1] }, {"$size":"$first_verifications.verifications"} , { "$size": "$variables.verifications" } ] }, else: 0}},
+        sanctionLetter: { "$cond": { if:{ "$isArray": "$variables.sanctionLetter" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.sanctionLetter"},1] }, {"$size":"$first_sanctionLetter.sanctionLetter"} , { "$size": "$variables.sanctionLetter" } ] }, else: 0}},
+        financials: { "$cond": { if:{ "$isArray": "$variables.financials" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.financials"},1] }, {"$size":"$first_financials.financials"} , { "$size": "$variables.financials" } ] }, else: 0}},
+        checklistAndDisbursementMemo: { "$cond": { if:{ "$isArray": "$variables.documents" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.documents"},1] }, {"$size":"$first_documents.checklistAndDisbursementMemo"} , { "$size": "$variables.documents" } ] }, else: 0}},
+        kycDocuments: { "$cond": { if:{ "$isArray": "$variables.kycDocuments" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.kycDocuments"},1] }, {"$size":"$first_kycDocuments.kycDocs"} , { "$size": "$variables.kycDocuments" } ] }, else: 0}},
+        repaymentInstruments: { "$cond": { if:{ "$isArray": "$variables.repaymentInstruments" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.repaymentInstruments"},1] }, {"$size":"$first_repaymentInstruments.repaymentInstruments"} , { "$size": "$variables.repaymentInstruments" } ] }, else: 0}},
+        loanAgreementAndDeed: { "$cond": { if:{ "$isArray": "$variables.loanAgreementAndDeed" }, then: { "$cond": [ { "$eq":[{"$size":"$variables.loanAgreementAndDeed"},1] }, {"$size":"$first_loanAgreementAndDeed.loanAgreementAndDeed"} , { "$size": "$variables.loanAgreementAndDeed" } ] }, else: 0}},
+        propertyPapers: { "$cond": { if:{ "$eq": ["$variables.isSecuredFinType",true] }, then: { "$cond": [{"$isArray": "$variables.propertyPapers"},{ "$cond": [ { "$eq":[{"$size":"$variables.propertyPapers"},1] }, {"$cond":[{"$isArray": "$first_propertyPapers.propertyPapers"},{"$size":"$first_propertyPapers.propertyPapers"},{"$size":"$variables.propertyPapers"}]} , { "$size": "$variables.propertyPapers" } ] },0] }, else: 0}},
+        originalCollateralDocuments: { "$cond": { if:{ "$eq": ["$variables.isSecuredFinType",true] }, then: { "$cond": [{"$isArray": "$variables.originalCollateralDocuments"},{ "$cond": [ { "$eq":[{"$size":"$variables.originalCollateralDocuments"},1] }, {"$cond":[{"$isArray": "$first_collateralDocs.collateralDocs"},{"$size":"$first_collateralDocs.collateralDocs"},{"$size":"$variables.originalCollateralDocuments"}]} , { "$size": "$variables.originalCollateralDocuments" } ] },0] }, else: 0}}
+    }},
+    {"$addFields":{Total:{ $add: [ "$approvals", "$postApprovalDocs", "$verifications", "$sanctionLetter", "$financials", "$checklistAndDisbursementMemo", "$kycDocuments", "$loanAgreementAndDeed", "$repaymentInstruments", "$propertyPapers", "$originalCollateralDocuments"] } } },
+    {"$lookup":{
+        from: "turiya.digitization.upload-file-helper-.process-uploadhelper",
+        localField: "loanNumber",
+        foreignField: "businessKey.root",
+        as: "fromItems"
+        }
+    },
+    {"$unwind":"$fromItems"},
+    {"$match":
+        {"$and":[
+            {"fromItems.stage.action":"end"},
+            {"fromItems.stage.name":"Get customer details"},
+            {"fromItems.variables.branchData.branchState":{"$ne":null}}]
+        }
+    },
+    [[{ $match: { "fromItems.variables.branchData.branchState" :{"$eq":  {{branchState}} } } },]]
+    {"$project":{loanNumber:1,date:1,finStartDate:{"$toDate":"$fromItems.variables.finStartDate"},timestamp:"$fromItems.timestamp",approvals:1,postApprovalDocs:1,verifications:1,sanctionLetter:1,financials:1,checklistAndDisbursementMemo:1,kycDocuments:1,repaymentInstruments:1,loanAgreementAndDeed:1,propertyPapers:1,originalCollateralDocuments:1,Total:1}},
+    {"$group":{_id:"$loanNumber",date:{$first:"$date"},finStartDate:{$first:"$finStartDate"},timestamp:{$first:"$timestamp"},approvals:{$first:"$approvals"},postApprovalDocs:{$first:"$postApprovalDocs"},verifications:{$first:"$verifications"},sanctionLetter:{$first:"$sanctionLetter"},financials:{$first:"$financials"},checklistAndDisbursementMemo:{$first:"$checklistAndDisbursementMemo"},kycDocuments:{$first:"$kycDocuments"},repaymentInstruments:{$first:"$repaymentInstruments"},loanAgreementAndDeed:{$first:"$loanAgreementAndDeed"},propertyPapers:{$first:"$propertyPapers"},originalCollateralDocuments:{$first:"$originalCollateralDocuments"},Total:{$first:"$Total"}}},
+    [[{ $match: { "finStartDate" :{"$gte":  {{finStartDate_start}} } } },]]
+    [[{ $match: { "finStartDate" :{"$lte":  {{finStartDate_end}} } } },]]
+    {"$sort":{timestamp:-1}},
+    {"$addFields":{Deadline:{"$add":["$date",604800000]}}},
+    {"$addFields":{Status:{"$cond":[{"$gt":[new Date(),"$Deadline"]},"dead","safe"]}}},
+    {"$project":{_id:0,StartDate:"$date",loanNumber:"$_id",Deadline:1,Status:1,finStartDate:1,approvals:1,postApprovalDocs:1,verifications:1,sanctionLetter:1,financials:1,checklistAndDisbursementMemo:1,kycDocuments:1,repaymentInstruments:1,loanAgreementAndDeed:1,propertyPapers:1,originalCollateralDocuments:1,Total:1}}
+]  
+  
 ```
 
   [bps10]: https://github.com/bps10
