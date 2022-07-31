@@ -9,8 +9,16 @@ With Google Coursera
   [![Package Control Downloads][pc-image]][pc-link]
   ![License][license-image]
 
-## Documents
+## Supplemental Reading for Windows CLI & Unix Bash
 
+For more detailed information on the modern Windows CLI, PowerShell, see the <a target="_blank" href="https://docs.microsoft.com/powershell/">official PowerShell documentation</a>, and the <a href="https://docs.microsoft.com/powershell/scripting/learn/ps101/00-introduction" target="_blank">PowerShell 101 guide</a>. For more on the older Windows "Command Prompt" CLI (cmd.exe) please see the link <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands" target="_blank">here</a>. 
+
+If you want to check out more information on Bash, then click the link <a href="https://www.gnu.org/software/bash/manual/bash.html" target="_blank">here</a>.
+
+
+## Supplemental Reading for 'Size' vs 'Size of Disk' in Windows
+
+For more information on 'size on disk' vs 'folder size' in Windows, please check out the link <a href="https://technet.microsoft.com/en-us/library/hh148159.aspx" target="_blank">here</a>.
 
 
 
