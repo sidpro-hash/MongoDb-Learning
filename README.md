@@ -1667,6 +1667,128 @@ unwind two array and remove duplicates
     {"$match":{valid:true}},
     {"$project":{DocType:1,count:1}}
 ]
+
+
+
+
+Step wise deal
+[
+    {"$match":
+        {"$and":[
+            {"$and":[
+                {"meta.stageAction":"end"}]
+            },
+            {"$or":[
+                {"meta.stageName":"Insight Ready to send to OPS"},
+                {"meta.stageName":"Ready to send to OPS Insight"},
+                {"meta.stageName":"Execution Insight"},
+                {"meta.stageName":"Insight Execution"},
+                {"meta.stageName":"KIT1 Insight"},
+                {"meta.stageName":"Insight KIT1"},
+                {"meta.stageName":"DataCheck Insight"},
+                {"meta.stageName":"Insight DataCheck"},
+                {"meta.stageName":"GIS and Agreement Insight"},
+                {"meta.stageName":"Insight GIS and Agreement"},
+                {"meta.stageName":"Sent to OPS Insight"},
+                {"meta.stageName":"Insight Sent to OPS"},
+                {"meta.stageName":"FI initiation Insight"},
+                {"meta.stageName":"Insight FI initiation"}]
+            }]
+        }    
+    },
+    {"$addFields": {"last_update_date": { "$toDate": "$meta.lastUpdate" }}},
+    {"$addFields": {"initiated_date": { "$toDate": "$data.initiated_date" }}},
+    [[{ $match: { "initiated_date" : { $gte: {{start_date}} } } },]]
+    [[{ $match: { "initiated_date" : { $lt: {{end_date}} } } },]]
+    [[{ $match: { "id.rootBusinessKey" : { $regex: {{BusinessKey}} } } },]]
+    {"$addFields":{stageName:"$meta.stageName"}},
+    
+    {"$facet":{
+        "B_Initial_verification": [
+            {"$match":{"$or":[{"stageName":"Insight FI initiation"},{"stageName":"FI initiation Insight"}]}},
+            {"$sort":{"last_update_date":-1}},
+            {"$group": {_id: "$id.rootBusinessKey",stageName:{$first:"$stageName"},submit:{$first:"$data.submit"}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Insight FI initiation"]},"B_Initial verification","$stageName"]}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","FI initiation Insight"]},"B_Initial verification","$stageName"]}}},
+            {"$addFields":{DONE:{"$cond":["$submit",1,0]}}},
+            {"$addFields":{PENDING:{"$cond":["$submit",0,1]}}},
+            {"$group": {_id: "$stageName",PENDING:{$sum:"$PENDING"},DONE:{$sum:"$DONE"}}}],
+        
+        "E_DMTL_Check": [
+            {"$match":{"$or":[{"stageName":"Insight Ready to send to OPS"},{"stageName":"Ready to send to OPS Insight"}]}},
+            {"$sort":{"last_update_date":-1}},
+            {"$group": {_id: "$id.rootBusinessKey",stageName:{$first:"$stageName"},submit:{$first:"$data.submit"}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Insight Ready to send to OPS"]},"E_DMTL Check","$stageName"]}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Ready to send to OPS Insight"]},"E_DMTL Check","$stageName"]}}},
+            {"$addFields":{DONE:{"$cond":["$submit",1,0]}}},
+            {"$addFields":{PENDING:{"$cond":["$submit",0,1]}}},
+            {"$group": {_id: "$stageName",PENDING:{$sum:"$PENDING"},DONE:{$sum:"$DONE"}}}],
+            
+        "D_Execution": [
+            {"$match":{"$or":[{"stageName":"Execution Insight"},{"stageName":"Insight Execution"}]}},
+            {"$sort":{"last_update_date":-1}},
+            {"$group": {_id: "$id.rootBusinessKey",stageName:{$first:"$stageName"},submit:{$first:"$data.submit"}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Execution Insight"]},"D_Execution","$stageName"]}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Insight Execution"]},"D_Execution","$stageName"]}}},
+            {"$addFields":{DONE:{"$cond":["$submit",1,0]}}},
+            {"$addFields":{PENDING:{"$cond":["$submit",0,1]}}},
+            {"$group": {_id: "$stageName",PENDING:{$sum:"$PENDING"},DONE:{$sum:"$DONE"}}}],
+            
+        "A_KIT1": [
+            {"$match":{"$or":[{"stageName":"KIT1 Insight"},{"stageName":"Insight KIT1"}]}},
+            {"$sort":{"last_update_date":-1}},
+            {"$group": {_id: "$id.rootBusinessKey",stageName:{$first:"$stageName"},submit:{$first:"$data.submit"}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","KIT1 Insight"]},"A_KIT1","$stageName"]}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Insight KIT1"]},"A_KIT1","$stageName"]}}},
+            {"$addFields":{DONE:{"$cond":["$submit",1,0]}}},
+            {"$addFields":{PENDING:{"$cond":["$submit",0,1]}}},
+            {"$group": {_id: "$stageName",PENDING:{$sum:"$PENDING"},DONE:{$sum:"$DONE"}}}],
+            
+        "A_DataCheck": [
+            {"$match":{"$or":[{"stageName":"DataCheck Insight"},{"stageName":"Insight DataCheck"}]}},
+            {"$sort":{"last_update_date":-1}},
+            {"$group": {_id: "$id.rootBusinessKey",stageName:{$first:"$stageName"},submit:{$first:"$data.submit"}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","DataCheck Insight"]},"A_DataCheck","$stageName"]}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Insight DataCheck"]},"A_DataCheck","$stageName"]}}},
+            {"$addFields":{DONE:{"$cond":["$submit",1,0]}}},
+            {"$addFields":{PENDING:{"$cond":["$submit",0,1]}}},
+            {"$group": {_id: "$stageName",PENDING:{$sum:"$PENDING"},DONE:{$sum:"$DONE"}}}],
+            
+        "C_GIS_and_Agreement": [
+            {"$match":{"$or":[{"stageName":"GIS and Agreement Insight"},{"stageName":"Insight GIS and Agreement"}]}},
+            {"$sort":{"last_update_date":-1}},
+            {"$group": {_id: "$id.rootBusinessKey",stageName:{$first:"$stageName"},submit:{$first:"$data.submit"}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","GIS and Agreement Insight"]},"C_GIS_and_Agreement","$stageName"]}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Insight GIS and Agreement"]},"C_GIS_and_Agreement","$stageName"]}}},
+            {"$addFields":{DONE:{"$cond":["$submit",1,0]}}},
+            {"$addFields":{PENDING:{"$cond":["$submit",0,1]}}},
+            {"$group": {_id: "$stageName",PENDING:{$sum:"$PENDING"},DONE:{$sum:"$DONE"}}}],
+            
+        "F_Sent_to_OPS": [
+            {"$match":{"$or":[{"stageName":"Sent to OPS Insight"},{"stageName":"Insight Sent to OPS"}]}},
+            {"$sort":{"last_update_date":-1}},
+            {"$group": {_id: "$id.rootBusinessKey",stageName:{$first:"$stageName"},submit:{$first:"$data.submit"}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Sent to OPS Insight"]},"F_Sent_to_OPS","$stageName"]}}},
+            {"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","Insight Sent to OPS"]},"F_Sent_to_OPS","$stageName"]}}},
+            {"$addFields":{DONE:{"$cond":["$submit",1,0]}}},
+            {"$addFields":{PENDING:{"$cond":["$submit",0,1]}}},
+            {"$group": {_id: "$stageName",PENDING:{$sum:"$PENDING"},DONE:{$sum:"$DONE"}}}]
+            
+        }
+    },
+    
+    {"$project":{StageName:["B_Initial verification","E_DMTL Check","D_Execution","A_KIT1","A_DataCheck","C_GIS and Agreement","F_Sent to OPS"],
+    PENDING:[{$arrayElemAt: [ "$B_Initial_verification.PENDING", 0 ]},{$arrayElemAt: [ "$E_DMTL_Check.PENDING", 0 ]},{$arrayElemAt: [ "$D_Execution.PENDING", 0 ]},{$arrayElemAt: [ "$A_KIT1.PENDING", 0 ]},{$arrayElemAt: [ "$A_DataCheck.PENDING", 0 ]},{$arrayElemAt: [ "$C_GIS_and_Agreement.PENDING", 0 ]},{$arrayElemAt: [ "$F_Sent_to_OPS.PENDING", 0 ]}],
+    DONE:[{$arrayElemAt: [ "$B_Initial_verification.DONE", 0 ]},{$arrayElemAt: [ "$E_DMTL_Check.DONE", 0 ]},{$arrayElemAt: [ "$D_Execution.DONE", 0 ]},{$arrayElemAt: [ "$A_KIT1.DONE", 0 ]},{$arrayElemAt: [ "$A_DataCheck.DONE", 0 ]},{$arrayElemAt: [ "$C_GIS_and_Agreement.DONE", 0 ]},{$arrayElemAt: [ "$F_Sent_to_OPS.DONE", 0 ]}]
+    }},
+    {"$unwind":{path:"$StageName",includeArrayIndex:"index1"}},
+    {"$unwind":{path:"$PENDING",includeArrayIndex:"index2"}},
+    {"$unwind":{path:"$DONE",includeArrayIndex:"index3"}},
+    {"$project":{count:1,DONE:1,StageName:1,PENDING:1,index2:1,index1:1,valid:{"$cond":[{"$eq":["$index1","$index2"]},{"$eq":["$index2","$index3"]},false]}}},
+    {"$match":{valid:true}},
+    {"$project":{DONE:1,StageName:1,PENDING:1}},
+    {"$sort":{StageName:1}}
+]
   
 ```
 
