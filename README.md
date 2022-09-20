@@ -713,6 +713,35 @@ select
 from msg91_audit
 where msg91_audit.request_body ->> 'flow_id' is not null
 group by flow_id
+	
+	
+SELECT "source"."id" AS "id", "source"."provider_ref_id" AS "provider_ref_id", "source"."provider" AS "provider", "source"."mobile_number" AS "mobile_number", "source"."los_type" AS "los_type", "source"."los_app_id" AS "los_app_id", "source"."status" AS "status", "source"."created_at" AS "created_at", "source"."updated_at" AS "updated_at", "source"."perfios_requests_snap__perfios_ref_id" AS "perfios_requests_snap__perfios_ref_id", 
+CASE 
+    when json_extract_scalar(source.aa_request_logs_snap__error_raw , '$.code') = 'BAD_REQUEST' THEN 'BAD_REQUEST'
+    when json_extract_scalar(source.aa_request_logs_snap__error_raw , '$.code') = 'LOS_APP_ID_ALREADY_EXISTS' THEN 'LOS_APP_ID_ALREADY_EXISTS'
+    else json_extract_scalar(source.aa_request_logs_snap__error_raw , '$.errorCode')
+END errorCode,
+CASE 
+    when json_extract_scalar(source.aa_request_logs_snap__error_raw , '$.code') = 'BAD_REQUEST' THEN 'Please specify valid field'
+    when json_extract_scalar(source.aa_request_logs_snap__error_raw , '$.code') = 'LOS_APP_ID_ALREADY_EXISTS' THEN json_extract_scalar(source.aa_request_logs_snap__error_raw , '$.message')
+    else json_extract_scalar(source.aa_request_logs_snap__error_raw , '$.errorMessage')
+END errorMessage
+FROM (SELECT "banking_prod_rt_edp"."aa_requests_snap"."id" AS "id", "banking_prod_rt_edp"."aa_requests_snap"."provider_ref_id" AS "provider_ref_id", "banking_prod_rt_edp"."aa_requests_snap"."provider" AS "provider", "banking_prod_rt_edp"."aa_requests_snap"."mobile_number" AS "mobile_number", "banking_prod_rt_edp"."aa_requests_snap"."los_type" AS "los_type", "banking_prod_rt_edp"."aa_requests_snap"."los_app_id" AS "los_app_id", "banking_prod_rt_edp"."aa_requests_snap"."status" AS "status", from_unixtime(("banking_prod_rt_edp"."aa_requests_snap"."created_at" / 1000)) AS "created_at", from_unixtime(("banking_prod_rt_edp"."aa_requests_snap"."updated_at" / 1000)) AS "updated_at", "perfios_requests_snap"."perfios_ref_id" AS "perfios_requests_snap__perfios_ref_id", "aa_request_logs_snap"."error_raw" AS "aa_request_logs_snap__error_raw" FROM "banking_prod_rt_edp"."aa_requests_snap"
+LEFT JOIN "banking_prod_rt_edp"."perfios_requests_snap" "perfios_requests_snap" ON "banking_prod_rt_edp"."aa_requests_snap"."provider_ref_id" = "perfios_requests_snap"."id" 
+LEFT JOIN (with only_latest AS (
+    SELECT p.aa_request_id,
+           p.status, 
+           p.created_at,
+           p.error_raw,
+           ROW_NUMBER() OVER(PARTITION BY p.aa_request_id 
+                                 ORDER BY p.created_at DESC) AS rank
+      FROM banking_prod_rt_edp.aa_request_logs_snap p)
+ SELECT *
+   FROM only_latest
+ WHERE rank = 1) as "aa_request_logs_snap" ON "banking_prod_rt_edp"."aa_requests_snap"."id" = "aa_request_logs_snap"."aa_request_id") "source"
+[[ WHERE "source"."id" = {{aa_request_id}} ]]
+ORDER BY "source"."id" ASC
+
 ```
 
 ## MongoDb Query Building
