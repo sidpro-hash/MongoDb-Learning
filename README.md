@@ -717,6 +717,64 @@ group by flow_id
 
 ## MongoDb Query Building
 ```
+
+*** timestamp to date ****
+
+{"$addFields":{datetime:{"$toDate":{"$add":[{"$multiply":["$timestamp.seconds",1000]},{"$divide":["$timestamp.nanos",1000000]}]}}}},
+		OR
+{"$addFields": {"date": { "$toDate": "$date" }}},
+
+
+
+*** regex match exp with optional ***
+
+[[{ $match: { "case_id" : { $regex: {{caseId}} } } },]]
+[[{ $match: { "datetime" : { $gte: {{start_date}} } } },]]
+[[{ $match: { "datetime" : { $lt: {{end_date}} } } },]]
+
+
+
+*** $cond with $eq ***
+
+"kyc_status":{"$cond":[{"$eq":["$name","KYC"]},"Not Completed","Completed"]}
+"Initial_Verification":{"$cond":["$initialVerificationSubmit","Done","Pending"]}
+
+
+
+*** $substr ****
+
+{"$addFields":{root:{"$substr":["$root",14,22]}}},
+				stringvar,startindex,numberOfcharacter
+
+
+
+*** $group by more than two variables ***
+
+{"$group":{_id:{rootBusinessKey:"$root",docType:"$data.docType"},data:{$first:"$data"},errorMessage:{$first:"$data.errorMessage"},message:{$first:"$data.message"}}},
+
+
+
+
+*** Extract hour from date ***
+
+{"$addFields":{hour:{"$hour": {
+                            date: {"$toDate":"$meta.start"},
+                            timezone: "+0530"
+                            }
+                        }
+                    }
+    },
+
+
+
+*** $addFields modify existing column ***
+
+{"$addFields":{stageName:{"$cond":[{"$eq":["$stageName","DataCheck Insight"]},"DataCheck","$stageName"]}}},
+
+
+
+-------------------------------------------------------------------------
+
 Funnel View Of Count
 [
     {"$match":
