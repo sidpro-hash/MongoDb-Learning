@@ -319,6 +319,74 @@ sudo apt remove gimp
 
 For more information about the FAT32 File System, please check out the link <a href="https://support.microsoft.com/en-us/help/154997/description-of-the-fat32-file-system" target="_blank">here</a>.
 
+# Week 3
+
+## Supplemental Reading for Disk Partitioning and Formatting in Windows
+
+### Disk Partitioning and Formatting in Windows
+
+Disk partitioning enables more efficient management of hard disk space by breaking or “slicing” up the disk storage space into partitions. This breaking allows for each partition to be managed separately by reducing inefficient use of space. DiskPart is a disk partitioning utility on the Windows operating system which uses the command line to perform operations. This reading covers the component parts that make up a drive, common DiskPart commands, and how cluster size affects your usable drive space in the Windows OS.
+
+### DiskPart
+
+The DiskPart command terminal helps you manage storage on your computer's drives. DiskPart utility can be used to manage partitions of hard disks including creating, deleting, merging, or expanding partitions and volumes. It can also be used to assign a file formatting system to a partition or volume. 
+
+There are three main divisions of storage that you will find on a drive: cluster, volume, and partition. 
+
+To use DiskPart you will need to use specific commands to select and manage the parts of your drive you need to access. For a list of common DiskPart terminal commands visit <a href="https://drive.google.com/file/d/1qDFyYB5uYLranPk9pZBz0heq0B5hmroH/view" target="_blank">this helpful guide</a>.
+
+- **Cluster** (allocation unit size) is the minimum amount of space a file can take up in a volume or drive.
+- **Volume** is a single accessible storage area with a single file system; this can be across a single disk or multiple.
+- **Partition** is a logical division of a hard disk that can create unique spaces on a single drive. Generally used for allowing multiple operating systems.
+
+The commands let you work with partitions and volumes but the base storage unit called cluster size is set when initiating the volume or partition. 
+
+### Cluster Size
+
+Cluster size is the smallest division of storage possible in a drive. Cluster size is important because a file will take up the entire size of the cluster regardless of how much space it actually requires in the cluster. 
+
+For example, if the cluster size is 4kb (the default size for many formats and sizes) and the file you're trying to store is 4.1kb, that file will take up 2 clusters. This means that the drive has effectively lost 3.9 kb of space for use on a single file. 
+
+When partitioning a disk, you should specify the cluster size based on your file sizes. If no cluster size is specified when you format a partition, a default is selected based on the size of the partition. Using defaults can result in loss of usable storage space.
+
+It is important to remember when using DiskPart that the actions you take are permanent so be careful not to erase data accidentally.
+
+### Key Takeaways
+
+DiskPart is a tool that lets you manage your storage from a command line interface and is useful for a multitude of actions including creating, deleting, merging, and repairing drives.
+
+- The three main divisions of storage that you will find on a drive are cluster, volume, and partition. 
+
+- To use DiskPart you will need to use specific commands to select and manage the parts of your drive you need to access. 
+
+- Cluster size is the smallest division of storage possible in a drive. Cluster size is important because a file will take up the entire size of the cluster regardless of how much space it actually requires in the cluster.
+
+
+## Supplemental reading Mounting and Unmounting a Filesystem in Linux
+
+For more information about mounting and unmounting a filesystem in Linux, you can read more about fstab <a href="https://en.wikipedia.org/wiki/Fstab" target="_blank">here</a>.
+
+## Supplemental Reading for Windows Paging
+
+For more information on Windows Paging, check out the link <a href="https://en.wikipedia.org/wiki/Paging#Windows_NT" target="_blank">here</a>. You can also learn how to determine the appropriate page file size for 64-bit versions of Windows <a href="https://support.microsoft.com/en-us/help/2860880/how-to-determine-the-appropriate-page-file-size-for-64-bit-versions-of" target="_blank">here</a>.
+
+
+## Supplemental Reading for Linux Swap
+
+For more information about swap, please check out the link <a href="" target="_blank">here</a>.
+
+
+## Supplemental Reading on NTFS File System
+
+For more information about the NTFS file system, please check out the following links: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365230(v=vs.85).aspx" target="_blank">Master File Table</a>, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa363878(v=vs.85).aspx" target="_blank">Creating Symbolic Links</a>, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365006(v=vs.85).aspx" target="_blank">Hard Links and Junctions</a>.
+
+## Supplemental Reading for Windows Disk Usage
+
+For more information about disk usage in Windows, check out the following links: <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/du" target="_blank">Disk Usage</a>, <a href="https://support.microsoft.com/en-us/help/181701/how-to-start-disk-cleanup-by-using-the-command-line">How to start Disk Cleanup by using the command line</a>.
+
+
+
+
 
 
   [bps10]: https://github.com/bps10
