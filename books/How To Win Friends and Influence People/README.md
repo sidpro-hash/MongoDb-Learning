@@ -305,3 +305,39 @@ Let the other person do a great deal of the talking.
 Let the other person feel that the idea is his or hers.
 
 ‘The reason why rivers and seas receive the homage of a hundred mountain streams is that they keep below them. Thus they are able to reign over all the mountain streams. So the sage, wishing to be above men, putteth himself below them; wishing to be before them, he putteth himself behind them. Thus, though his place be above men, they do not feel his weight; though his place be before them, they do not count it an injury.’
+
+## A FORMULA THAT WILL WORK WONDERS FOR YOU
+
+
+REMEMBER THAT OTHER people may be totally wrong. But they don’t think so. Don’t condemn them. Any fool can do that. Try to understand them. Only wise, tolerant, exceptional people even try to do that.
+
+There is a reason why the other man thinks and acts as he does. Ferret out that reason – and you have the key to his actions, perhaps to his personality. Try honestly to put yourself in his place. If you say to yourself, ‘How would I feel,
+
+## PRINCIPLE 8
+
+Try honestly to see things from the other person’s point of view
+
+## PRINCIPLE 9
+
+Be sympathetic with the other person’s ideas and desires.
+
+## PRINCIPLE 10
+
+Appeal to the nobler motives.
+
+## PRINCIPLE 11
+
+Dramatise your ideas.
+
+## PRINCIPLE 12
+Throw down a challenge.
+
+# BE A LEADER: HOW TO CHNAGE PEOPLE WITHOUT GIVING OFFENCE OR AROUSING RESENTMENT
+
+he heard Coolidge say to one of his secretaries, ‘That’s a very pretty dress you are wearing this morning, and you are a very attractive young woman.’
+
+That was probably the most effusive praise Silent Cal had ever bestowed upon a secretary in his life. It was so unusual, so unexpected, that the secretary blushed in confusion. Then Coolidge said, ‘Now, don’t get stuck up. I just said
+that to make you feel good. From now on, I wish you would be a little more
+careful with your punctuation.’
+
+His method was probably a bit obvious, but the psychology was superb. It is always easier to listen to unpleasant things after we have heard some praise of our good points.

@@ -9,6 +9,10 @@ With MarkdownPreview
   ![License][license-image]
 
 
+
+# C++
+
+
 ```
 #define FAST ios_base::sync_with_stdio(false), cin.tie(0),cout.tie(0);
 //endl flushes output and forces data being written to disk. And this can significantly slow your program if you are doing this a lot.
@@ -73,6 +77,45 @@ for(auto [_,i]:mp)v.push_back(i);
 in the hashmap, we stored the value of number: key-value pair. However, in the array, we are just interested in frequency because that's what we will be sorting and then using subsequently. 
 
 <code>auto[_, freq]</code> will split the iterator into two, <code> _ </code> which points to the number or the key in the hashmap, and <code>freq</code> which points to the frequency of the number or the value in the hashmap.
+
+
+# Python
+
+## list comprehension
+
+The return value is a new list, leaving the old list unchanged.
+
+newlist = [expression for item in iterable if condition == True]
+
+split string into chunks
+
+```
+
+str = 'Welcome to Python Examples'
+n = 5
+
+chunks = []
+
+# using list comperhension
+
+chunks = [str[i:i+n] for i in range(0, len(str), n)]
+
+# Normal way to split string by character length
+
+
+i = 0
+while i < len(str):
+    if i+n < len(str):
+        chunks.append(str[i:i+n])
+    else:
+        chunks.append(str[i:len(str)])
+    i += n
+print(chunks)
+
+
+```
+
+
 
 
 
