@@ -341,3 +341,34 @@ that to make you feel good. From now on, I wish you would be a little more
 careful with your punctuation.’
 
 His method was probably a bit obvious, but the psychology was superb. It is always easier to listen to unpleasant things after we have heard some praise of our good points.
+
+## PRINCIPLE 1
+
+Begin with praise and honest appreciation.
+
+## HOW TO CRITICISE AND NOT BE HATED FOR IT
+
+‘We’re really proud of you, Johnnie, for raising your grades this term. But if you had worked harder on your algebra, the results would have been better.’
+
+In this case, Johnnie might feel encouraged until he heard the word ‘but.’ He might then question the sincerity of the original praise. To him, the praise seemed only to be a contrived lead-in to a critical inference of failure. Credibility would be strained, and we probably would not achieve our objectives of changing Johnnie’s attitude toward his studies.
+This could be easily overcome by changing the word ‘but’ to ‘and.’ 
+
+‘We’re really proud of you, Johnnie, for raising your grades this term, and by continuing the same conscientious efforts next term, your algebra grade can be up with all the others.’
+
+## PRINCIPLE 2
+
+Call attention to people’s mistakes indirectly.
+
+## TALK ABOUT YOUR OWN MISTAKES FIRST
+
+## PRINCIPLE 3
+
+Talk about your own mistakes before criticising the other person.
+
+## NO ONE LIKES TO TAKE ORDERS
+
+she told me that while she was writing her biography of Owen D. Young, she interviewed a man who had sat for three years in the same office with Mr. Young. This man declared that during all that time he had never heard Owen D. Young give a direct order to anyone. He always gave suggestions, not orders. Owen D. Young never said, for example, ‘Do this or do that,’ or ‘Don’t do this or don’t do that.’ 
+
+He would say, ‘You might consider this,’ or ‘Do you think that would work?’ Frequently he would say, after he had dictated a letter, ‘What do you think of this?’ In looking over a letter of one of his assistants, he would say, ‘Maybe if we were to phrase it this way it would be better.’ He always gave people the opportunity to do things themselves; he never told his assistants to do things; he let them do them, let them learn from their mistakes.
+
+A technique like that makes it easy for a person to correct errors. A technique like that saves a person’s pride and gives him or her a feeling of importance. It encourages cooperation instead of rebellion.
