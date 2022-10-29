@@ -372,3 +372,49 @@ she told me that while she was writing her biography of Owen D. Young, she inter
 He would say, ‘You might consider this,’ or ‘Do you think that would work?’ Frequently he would say, after he had dictated a letter, ‘What do you think of this?’ In looking over a letter of one of his assistants, he would say, ‘Maybe if we were to phrase it this way it would be better.’ He always gave people the opportunity to do things themselves; he never told his assistants to do things; he let them do them, let them learn from their mistakes.
 
 A technique like that makes it easy for a person to correct errors. A technique like that saves a person’s pride and gives him or her a feeling of importance. It encourages cooperation instead of rebellion.
+
+
+## PRINCIPLE 4
+
+Ask questions instead of giving direct orders.
+
+## LET THE OTHER PERSON SAVE FACE
+
+## PRINCIPLE 5
+
+Let the other person save face.
+
+## HOW TO SPUR PEOPLE ON TO SUCCESS
+
+## PRINCIPLE 6
+
+Praise the slightest improvement and praise every improvement. Be ‘hearty
+in your approbation and lavish in your praise.’
+
+## GIVE A DOG A GOOD NAME
+
+‘Bill,’ he said, ‘you are a fine mechanic. You have been in this line of work for a good number of years. You have repaired many vehicles to the customers’ satisfaction. In fact, we’ve had a number of compliments about the good work you have done. Yet, of late, the time you take to complete each job has been increasing and your work has not been up to your own old standards. Because you have been such an outstanding mechanic in the past, I felt sure you would want to know that I am not happy with this situation, and perhaps jointly we could find some way to correct the problem.’
+
+Bill responded that he hadn’t realised he had been falling down in his duties and assured his boss that the work he was getting was not out of his range of expertise and he would try to improve in the future. Did he do it? You can be sure he did. He once again became a fast and thorough mechanic. With that reputation Mr. Henke had given him to live up to, how could he do anything else but turn out work comparable to that which he had done in the past.
+
+‘The average person,’ said Samuel Vauclain, then president of the Baldwin Locomotive Works, ‘can be led readily if you have his or her respect and if you show that you respect that person for some kind of ability.’ In short, if you want to improve a person in a certain respect, act as though that particular trait were already one of his or her outstanding characteristics.
+
+Shakespeare said ‘Assume a virtue, if you have it not.’ And it might be well to Assume and state openly that other people have the virtue you want them to develop. Give them a fine reputation to live up to, and they will make prodigious efforts rather than see you disillusioned.
+
+## PRINCIPLE 7
+
+Give the other person a fine reputation to live up to.
+
+## MAKE THE FAULT SEEMS EASY TO CORRECT
+
+Tell your child, your spouse, or your employee that he or she is stupid or dumb at a certain thing, has no gift for it, and is doing it all wrong, and you have destroyed almost every incentive to try to improve. But use the opposite technique – be liberal with your encouragement, make the thing seem easy to do, let the other person know that you have faith in his ability to do it, that he has an undeveloped flair for it – and he will practise until the dawn comes in the window in order to excel.
+
+## PRINCIPLE 8
+
+Use encouragement. Make the fault seem easy to correct
+
+## MAKING PEOPLE GLAD TO DO WHAT YOU WANT 
+
+## PRINCIPLE 9
+
+Make the other person happy about doing the thing you suggest.
