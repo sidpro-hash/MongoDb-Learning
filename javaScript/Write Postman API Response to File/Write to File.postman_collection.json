@@ -1,0 +1,252 @@
+{
+	"info": {
+		"_postman_id": "faa01c78-84b1-4863-a4c8-2b16617a4383",
+		"name": "Write to File",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26072479"
+	},
+	"item": [
+		{
+			"name": "Basic Standard IP Lookup",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.ip).to.exist;",
+							"    pm.expect(responseData.type).to.exist;",
+							"    pm.expect(responseData.continent_code).to.exist;",
+							"    pm.expect(responseData.country_code).to.exist;",
+							"    pm.expect(responseData.region_code).to.exist;",
+							"    pm.expect(responseData.city).to.exist;",
+							"    pm.expect(responseData.latitude).to.exist;",
+							"    pm.expect(responseData.longitude).to.exist;",
+							"    pm.expect(responseData.location).to.exist;",
+							"    pm.expect(responseData.time_zone).to.exist;",
+							"    pm.expect(responseData.currency).to.exist;",
+							"    pm.expect(responseData.connection).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Languages array is present and contains expected number of elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.location.languages).to.be.an('array');",
+							"    pm.expect(responseData.location.languages).to.have.lengthOf(1);",
+							"});",
+							"",
+							"// Please read the collection documentation on the right side (collection level documentation) to learn about how to use this collection -> ",
+							"let s = request.url.lastIndexOf(\"/\");",
+							"let q = request.url.indexOf(\"?\");",
+							"let name = request.url.substr(s+1,q-(s+1));",
+							"",
+							"// first start the server F:\\work of pro\\Linkdein Learning\\ResponseToFile-Postman-master\\script.js",
+							"",
+							"const postRequest = {",
+							"        url: 'http://localhost:3000/appendTxt',",
+							"        method: 'POST',",
+							"        header: {'Content-Type': 'application/json'},",
+							"        body: {",
+							"            mode: 'raw',",
+							"            raw: JSON.stringify({",
+							"                \"fileExtension\": \"mp3\",",
+							"                \"mode\": \"writeFile\",",
+							"                //\"uniqueIdentifier\": \"waddup\",",
+							"                \"existingFile\": \"myExistingFile\",",
+							"                \"responseData\": pm.response.text(),",
+							"                \"options\": {",
+							"                    \"encoding\": \"binary\"",
+							"                }",
+							"            })",
+							"        }",
+							"    };",
+							"",
+							"pm.sendRequest(postRequest, (error, response) => {",
+							"  console.log(error ? error : response);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.ipstack.com/134.201.250.155?access_key=7d2e65062e6683797aabf09b46511bf0",
+					"protocol": "https",
+					"host": [
+						"api",
+						"ipstack",
+						"com"
+					],
+					"path": [
+						"134.201.250.155"
+					],
+					"query": [
+						{
+							"key": "access_key",
+							"value": "7d2e65062e6683797aabf09b46511bf0"
+						}
+					]
+				},
+				"description": "This is the prime endpoint of IPstack API and used to look up single IPv4 or IPv6 addresses. To call this endpoint, simply attach any IPv4 or IPv6 address to the API's base URL."
+			},
+			"response": [
+				{
+					"name": "200 OK – Basic Standard IP Lookup",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.ipstack.com/134.201.250.155?access_key={PASTE_YOUR_API_KEY_HERE}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"ipstack",
+								"com"
+							],
+							"path": [
+								"134.201.250.155"
+							],
+							"query": [
+								{
+									"key": "access_key",
+									"value": "{PASTE_YOUR_API_KEY_HERE}",
+									"description": "You can get your API key by signing up at https://ipstack.com"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "content-type",
+							"value": "application/json"
+						},
+						{
+							"key": "transfer-encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "date",
+							"value": "Thu, 15 Feb 2024 13:07:34 GMT"
+						},
+						{
+							"key": "x-apilayer-transaction-id",
+							"value": "2b2f5934-6503-4232-ae97-b48d7a877754"
+						},
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-methods",
+							"value": "GET, POST, HEAD, OPTIONS"
+						},
+						{
+							"key": "access-control-allow-headers",
+							"value": "*"
+						},
+						{
+							"key": "x-quota-limit",
+							"value": "50000"
+						},
+						{
+							"key": "x-quota-remaining",
+							"value": "49999"
+						},
+						{
+							"key": "x-increment-usage",
+							"value": "1"
+						},
+						{
+							"key": "x-request-time",
+							"value": "0.029"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"ip\": \"134.201.250.155\",\n    \"type\": \"ipv4\",\n    \"continent_code\": \"NA\",\n    \"continent_name\": \"North America\",\n    \"country_code\": \"US\",\n    \"country_name\": \"United States\",\n    \"region_code\": \"CA\",\n    \"region_name\": \"California\",\n    \"city\": \"Los Angeles\",\n    \"zip\": \"90012\",\n    \"latitude\": 34.0655517578125,\n    \"longitude\": -118.24053955078125,\n    \"location\": {\n        \"geoname_id\": 5368361,\n        \"capital\": \"Washington D.C.\",\n        \"languages\": [\n            {\n                \"code\": \"en\",\n                \"name\": \"English\",\n                \"native\": \"English\"\n            }\n        ],\n        \"country_flag\": \"https://assets.ipstack.com/flags/us.svg\",\n        \"country_flag_emoji\": \"🇺🇸\",\n        \"country_flag_emoji_unicode\": \"U+1F1FA U+1F1F8\",\n        \"calling_code\": \"1\",\n        \"is_eu\": false\n    },\n    \"time_zone\": {\n        \"id\": \"America/Los_Angeles\",\n        \"current_time\": \"2024-02-15T05:07:34-08:00\",\n        \"gmt_offset\": -28800,\n        \"code\": \"PST\",\n        \"is_daylight_saving\": false\n    },\n    \"currency\": {\n        \"code\": \"USD\",\n        \"name\": \"US Dollar\",\n        \"plural\": \"US dollars\",\n        \"symbol\": \"$\",\n        \"symbol_native\": \"$\"\n    },\n    \"connection\": {\n        \"asn\": 25876,\n        \"isp\": \"Los Angeles Department of Water & Power\"\n    }\n}"
+				},
+				{
+					"name": "101 invalid_access_key",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.ipstack.com/134.201.250.155?access_key={PASTE_YOUR_API_KEY_HERE}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"ipstack",
+								"com"
+							],
+							"path": [
+								"134.201.250.155"
+							],
+							"query": [
+								{
+									"key": "access_key",
+									"value": "{PASTE_YOUR_API_KEY_HERE}",
+									"description": "You can get your API key by signing up at https://ipstack.com"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; Charset=UTF-8"
+						},
+						{
+							"key": "access-control-allow-methods",
+							"value": "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS"
+						},
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "x-blocked-at-loadbalancer",
+							"value": "1"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"error\": {\n        \"code\": 101,\n        \"type\": \"invalid_access_key\",\n        \"info\": \"You have not supplied a valid API Access Key. [Technical Support: support@apilayer.com]\"\n    }\n}"
+				}
+			]
+		}
+	]
+}
