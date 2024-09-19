@@ -22,17 +22,55 @@ With MarkdownPreview
 
 ## Vector
 
-### Initializing the vector of specific size.
+### Initializze the vector
+
+#### Initializing the vector of specific size.
 ```
 vector<int> v(map.size());
 ```
+#### Initiliaze 2D vector
+```
+vector<vector<int>> vec(10, vector<int>(10, 100));
+```
+This will create a vector of 10 vectors of size 10 and with elements initialized to 100.
 
-### Sort the vector in descending order
+### Sort the vector
+```
+sort(v.begin(), v.end());
+sort(begin(v), end(v));
+```
+Both <code>v.begin()</code> and <code>begin(v)</code> represent the same iterator pointing to the beginning of the vector.
+
+and <code>v.end()</code> and <code>end(v)</code> represent the same iterator pointing to the end of the vector. 
+
+So, the sorting operation in both cases will work in an identical manner. It's mostly a matter of personal preference which one you choose to use.
+
+
+#### Sort vector in descending order
 ```
 sort(v.begin(),v.end(),greater<int>());
 ```
 
-### Sort the vector of pair
+#### Sort 2D vector - function
+```
+bool compare(vector<int>& v1, vector<int>& v2) {
+    return v1[0] < v2[0];
+}
+
+sort(meetings.begin(), meetings.end(), compare);
+```
+
+#### Sort 2D vector - lambda
+```
+sort(begin(arr),end(arr),[](string &s1, string &s2){return s1+s2>s2+s1;});
+```
+Custom Comparator <code>([](string &s1, string &s2) { return s1 + s2 > s2 + s1; }):</code> This is a lambda function used as the comparison criterion for sorting.
+
+It determines the order of two strings (<code>s1</code> and <code>s2</code>) based on their concatenated results.
+
+Comparison: The lambda function returns <code>true</code> if <code>s1 + s2</code> is greater than <code>s2 + s1</code>. This means that <code>s1</code> should come before <code>s2</code> in the sorted order if concatenating <code>s1</code> with <code>s2</code> gives a larger number than concatenating <code>s2</code> with <code>s1</code>.
+
+#### Sort the vector of pair
 ```
 bool sort_by_first_if_then_second(const pair<string,int>&a,const pair<string,int>&b){
     if(a.second==b.second)return (a.first<b.first);
@@ -40,16 +78,21 @@ bool sort_by_first_if_then_second(const pair<string,int>&a,const pair<string,int
 }
 
 vector<pair<string,int>> v;
-
-for(int i=0;i<n;++i){
-        cin>>s;
-        cin>>k;
-        v.push_back(make_pair(s,k));
-}
-
 sort(v.begin(),v.end(),sort_by_first_if_then_second);
 ```
 
+#### Sort the vector of pair using template
+```
+template <typename T1, typename T2>
+struct less_second {
+    typedef pair<T1, T2> type;
+    bool operator ()(type const& a, type const& b) const {
+        return a.second > b.second;
+    }
+};
+
+sort(mapcopy.begin(), mapcopy.end(), less_second<char, int>());
+```
 
 
 ## map
